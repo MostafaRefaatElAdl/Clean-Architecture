@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>ea2b668e-d09d-41ee-8dd4-2489aa9b3b48</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OnionArch.Application\OnionArch.Application.csproj" />
+    <ProjectReference Include="..\OnionArch.Contracts\OnionArch.Contracts.csproj" />
+    <ProjectReference Include="..\OnionArch.Infrastructure\OnionArch.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
