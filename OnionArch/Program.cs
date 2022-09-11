@@ -1,6 +1,8 @@
 
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Options;
 using OnionArch.Application;
+using OnionArch.Errors;
 using OnionArch.Filters;
 using OnionArch.Infrastructure;
 using OnionArch.Middlewares;
@@ -13,7 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services
         .AddApplication()
         .AddInfrastructure(builder.Configuration);
-    builder.Services.AddControllers(Options => Options.Filters.Add<ErrorHandlingFilter>());
+    //builder.Services.AddControllers(Options => Options.Filters.Add<ErrorHandlingFilter>());
+    builder.Services.AddControllers();
+    builder.Services.AddSingleton<ProblemDetailsFactory, OnionArchProblemDetailsFactory>();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -21,7 +25,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 {
-    //Middleware approch=> 
+    //Middleware approch:
     //app.UseMiddleware<ErrorHandlingMiddleware>();
 
     
@@ -31,6 +35,7 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+    app.UseExceptionHandler("/error");
 
     app.UseHttpsRedirection();
 
