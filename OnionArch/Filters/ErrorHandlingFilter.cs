@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net;
 
 namespace OnionArch.Filters
 {
@@ -9,9 +10,15 @@ namespace OnionArch.Filters
         {
             var exception = context.Exception;
 
-            var errorResult = new { error = "Internal Server Error from the custom Filter." };
+            var problemDetails = new ProblemDetails
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
+                Title = "An error oocured while proccessing your request.",
+                Status = (int)HttpStatusCode.InternalServerError,
+            };
             
-            context.Result = new ObjectResult(errorResult) { StatusCode = 500 };
+            context.Result = new ObjectResult(problemDetails);
+            context.ExceptionHandled = true;
             base.OnException(context);
         }
     }
