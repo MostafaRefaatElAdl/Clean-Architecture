@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using OnionArch.Application.Services;
 using OnionArch.Contracts.Authentication;
+using OnionArch.Filters;
 using System.Xml.Linq;
 
 namespace OnionArch.Controllers
 {
     [Route("auth")]
     [ApiController]
+    //[ErrorHandlingFilter]
     public class AuthenticationController : ControllerBase
     {
 
