@@ -1,15 +1,15 @@
 ﻿using Microsoft.Win32;
+using OnionArch.Application.Services.Authentication.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnionArch.Application.Services
+namespace OnionArch.Application.Services.Authentication.Queries
 {
-    public interface IAuthenticationService
+    public interface IAuthenticationQueryService
     {
-        AuthenticationResult Register(string firstName, string lastName, string email, string password);
         AuthenticationResult Login(string email, string password);
     }
 }

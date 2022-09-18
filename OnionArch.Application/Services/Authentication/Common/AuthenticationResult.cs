@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnionArch.Application.Services
+namespace OnionArch.Application.Services.Authentication.Common
 {
     public record AuthenticationResult(
     User User,

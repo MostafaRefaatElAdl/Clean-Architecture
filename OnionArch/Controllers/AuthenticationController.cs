@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnionArch.Application.Services;
+using OnionArch.Application.Services.Authentication.Commands;
+using OnionArch.Application.Services.Authentication.Queries;
 using OnionArch.Contracts.Authentication;
 using OnionArch.Filters;
 using System.Xml.Linq;
@@ -13,17 +15,19 @@ namespace OnionArch.Controllers
     public class AuthenticationController : ControllerBase
     {
 
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IAuthenticationCommandService _authenticationCommandService;
+        private readonly IAuthenticationQueryService _authenticationQueryService;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationQueryService authenticationQueryService, IAuthenticationCommandService authenticationCommandService)
         {
-            _authenticationService = authenticationService;
+            _authenticationQueryService = authenticationQueryService;
+            _authenticationCommandService = authenticationCommandService;
         }
 
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest request)
         {
-            var authResult = _authenticationService.Register(
+            var authResult = _authenticationCommandService.Register(
                 request.FirstName,
                 request.LastName,
                 request.Email,
@@ -41,7 +45,7 @@ namespace OnionArch.Controllers
         [HttpPost("Login")]
         public IActionResult Login(LoginRequest request)
         {
-            var authResult = _authenticationService.Login(
+            var authResult = _authenticationQueryService.Login(
                 request.Email,
                 request.Password);
 
