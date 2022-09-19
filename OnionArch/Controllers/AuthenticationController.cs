@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnionArch.Application.Authentication.Commands.Register;
@@ -16,28 +17,32 @@ namespace OnionArch.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly ISender _mediator;
+        private readonly IMapper _mapper;
 
-        public AuthenticationController(ISender mediator)
+        public AuthenticationController(ISender mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
 
-            var command = new RegisterCommand(request.FirstName, request.LastName, request.Email, request.Password);
+            //var command = new RegisterCommand(request.FirstName, request.LastName, request.Email, request.Password);
+            var command = _mapper.Map<RegisterCommand>(request);
             AuthenticationResult authResult = await _mediator.Send(command);
             
-            return Ok(authResult);
+            return Ok(_mapper.Map<AuthenticationResponse>(authResult));
 
         }
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            var query = new LoginQuery(request.Email, request.Password);
+            //var query = new LoginQuery(request.Email, request.Password);
+            var query = _mapper.Map<LoginQuery>(request);
             var authResult = await _mediator.Send(query);
-            return Ok(authResult);
+            return Ok(_mapper.Map<AuthenticationResponse>(authResult));
         }
     }
 }
