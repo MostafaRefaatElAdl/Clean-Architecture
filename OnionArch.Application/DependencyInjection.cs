@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using OnionArch.Application.Services;
 using OnionArch.Application.Services.Authentication.Commands;
 using OnionArch.Application.Services.Authentication.Queries;
@@ -14,9 +15,7 @@ namespace OnionArch.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddScoped<IAuthenticationCommandService, AuthenticationCommandService>();
-            services.AddScoped<IAuthenticationQueryService, AuthenticationQueryService>();
-
+            services.AddMediatR(typeof(DependencyInjection).Assembly);
             return services;
         }
     }

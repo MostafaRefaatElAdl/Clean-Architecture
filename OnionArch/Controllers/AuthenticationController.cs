@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OnionArch.Application.Services;
-using OnionArch.Application.Services.Authentication.Commands;
-using OnionArch.Application.Services.Authentication.Queries;
+using OnionArch.Application.Authentication.Commands.Register;
+using OnionArch.Application.Authentication.Queries.Login;
+using OnionArch.Application.Services.Authentication.Common;
 using OnionArch.Contracts.Authentication;
 using OnionArch.Filters;
 using System.Xml.Linq;
@@ -14,48 +15,29 @@ namespace OnionArch.Controllers
     //[ErrorHandlingFilter]
     public class AuthenticationController : ControllerBase
     {
+        private readonly ISender _mediator;
 
-        private readonly IAuthenticationCommandService _authenticationCommandService;
-        private readonly IAuthenticationQueryService _authenticationQueryService;
-
-        public AuthenticationController(IAuthenticationQueryService authenticationQueryService, IAuthenticationCommandService authenticationCommandService)
+        public AuthenticationController(ISender mediator)
         {
-            _authenticationQueryService = authenticationQueryService;
-            _authenticationCommandService = authenticationCommandService;
+            _mediator = mediator;
         }
 
         [HttpPost("register")]
-        public IActionResult Register(RegisterRequest request)
+        public async Task<IActionResult> Register(RegisterRequest request)
         {
-            var authResult = _authenticationCommandService.Register(
-                request.FirstName,
-                request.LastName,
-                request.Email,
-                request.Password);
 
-            var response = new AuthenticationResponse(
-                authResult.User.Id,
-                authResult.User.FirstName,
-                authResult.User.LastName,
-                authResult.User.Email,
-                authResult.Token);
-            return Ok(response);
+            var command = new RegisterCommand(request.FirstName, request.LastName, request.Email, request.Password);
+            AuthenticationResult authResult = await _mediator.Send(command);
+            
+            return Ok(authResult);
 
         }
         [HttpPost("Login")]
-        public IActionResult Login(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
-            var authResult = _authenticationQueryService.Login(
-                request.Email,
-                request.Password);
-
-            var response = new AuthenticationResponse(
-                authResult.User.Id,
-                authResult.User.FirstName,
-                authResult.User.LastName,
-                authResult.User.Email,
-                authResult.Token);
-            return Ok(response);
+            var query = new LoginQuery(request.Email, request.Password);
+            var authResult = await _mediator.Send(query);
+            return Ok(authResult);
         }
     }
 }
