@@ -1,13 +1,11 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using OnionArch.Application.Services;
-using OnionArch.Application.Services.Authentication.Commands;
-using OnionArch.Application.Services.Authentication.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OnionArch.Application.Authentication.Commands.Register;
+using OnionArch.Application.Common.Behaviors;
+using OnionArch.Application.Services.Authentication.Common;
+using System.Reflection;
 
 namespace OnionArch.Application
 {
@@ -16,6 +14,10 @@ namespace OnionArch.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddMediatR(typeof(DependencyInjection).Assembly);
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBahavior<,>));
+            
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
             return services;
         }
     }

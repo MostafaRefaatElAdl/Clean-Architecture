@@ -1,7 +1,9 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 using OnionArch.Application.Authentication.Commands.Register;
 using OnionArch.Application.Common.Interfaces.Authentication;
 using OnionArch.Application.Common.Interfaces.Presistence;
+using OnionArch.Domain.Common.Errors;
 using OnionArch.Application.Services.Authentication.Common;
 using OnionArch.Domain.Entities;
 using System;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace OnionArch.Application.Authentication.Queries.Login
 {
-    public class LoginQueryHandler : IRequestHandler<LoginQuery, AuthenticationResult>
+    public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<AuthenticationResult>>
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IUserRepository _userRepository;
@@ -23,17 +25,17 @@ namespace OnionArch.Application.Authentication.Queries.Login
             _userRepository = userRepository;
         }
 
-        public async Task<AuthenticationResult> Handle(LoginQuery query, CancellationToken cancellationToken)
+        public async Task<ErrorOr<AuthenticationResult>> Handle(LoginQuery query, CancellationToken cancellationToken)
         {
             //Check if user exsits
             if (_userRepository.GetUserByEmail(query.Email) is not User user)
             {
-                throw new Exception("User with given email does not exsits.");
+                return Errors.Authentication.InvalidCredentials;
             }
             //validate the password is correct
             if (user.Password != query.Password)
             {
-                throw new Exception("Invalid password");
+                return Errors.Authentication.InvalidCredentials;
             }
             //create the JWT token
 

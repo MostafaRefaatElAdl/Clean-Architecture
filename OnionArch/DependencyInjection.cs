@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
-using OnionArch.Errors;
+using OnionArch.Common.Errors;
 using OnionArch.Mapping;
 
 namespace OnionArch

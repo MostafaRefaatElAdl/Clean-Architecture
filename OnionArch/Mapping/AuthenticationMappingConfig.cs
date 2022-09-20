@@ -13,7 +13,7 @@ namespace OnionArch.Mapping
             config.NewConfig<RegisterRequest, RegisterCommand>();
             config.NewConfig<LoginRequest, LoginQuery>();
 
-            config.NewConfig<AuthenticationResult, AuthenticationResponse>().Map(dest => dest, src=> src.User);
+            config.NewConfig<AuthenticationResult, AuthenticationResponse>().Map(dest => dest, src => src.User);
         }
     }
 }

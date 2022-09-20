@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 using OnionArch.Application.Services.Authentication.Common;
 using System;
 using System.Collections.Generic;
@@ -8,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace OnionArch.Application.Authentication.Queries.Login
 {
-    public record LoginQuery(string Email, string Password) : IRequest<AuthenticationResult>;
+    public record LoginQuery(string Email, string Password) : IRequest<ErrorOr<AuthenticationResult>>;
 }

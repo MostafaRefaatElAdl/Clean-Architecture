@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Options;
 using OnionArch;
 using OnionArch.Application;
-using OnionArch.Errors;
 using OnionArch.Filters;
 using OnionArch.Infrastructure;
 using OnionArch.Middlewares;

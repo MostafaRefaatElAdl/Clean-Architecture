@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 using OnionArch.Application.Services.Authentication.Common;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,5 @@ namespace OnionArch.Application.Authentication.Commands.Register
         string LastName, 
         string Email, 
         string Password
-        ): IRequest<AuthenticationResult>; 
+        ): IRequest<ErrorOr<AuthenticationResult>>; 
 }
